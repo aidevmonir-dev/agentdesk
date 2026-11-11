@@ -1,0 +1,61 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentDesk | An AI agent that asks before it acts</title>
+<meta name="description" content="An AI operations agent for a small business. It looks up customers, orders and the calendar on its own, and proposes refunds, bookings and emails for a person to approve. Open source, by Devomio.">
+<link rel="icon" type="image/svg+xml" href="{% static 'agent/icon.svg' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'agent/app.css' %}">
+</head>
+<body>
+<header class="bar">
+  <a class="product" href="/"><img src="{% static 'agent/icon.svg' %}" width="30" height="30" alt=""><span>AgentDesk</span></a>
+  <p class="by">A demo by <a href="https://devomio.com/" rel="noopener">Devomio</a></p>
+  <button type="button" class="link" id="reset">Reset the demo</button>
+  <a class="repo" href="{{ repo_url }}" rel="noopener">Source on GitHub</a>
+</header>
+
+<main class="layout">
+  <section class="chat" aria-label="Chat with the agent">
+    <div class="thread" id="thread" aria-live="polite">
+      <div class="intro" id="intro">
+        <h1>An AI agent that asks before it acts.</h1>
+        <p>This agent runs the back office of a made-up bike shop. It looks up customers, orders and the calendar on its own. Anything that changes something, such as a refund, a booking or an email, waits for you to approve it.</p>
+        {% if not ai_enabled %}
+        <p class="banner">No AI model is connected to this copy, so the examples below run pre-written plans through the real tools, checks and approval queue. Add an API key to give the agent your own requests.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="examples" id="examples" aria-label="Example tasks">
+      {% for key, prompt in scripts.items %}
+      <button type="button" class="example" data-script="{{ key }}">{{ prompt }}</button>
+      {% endfor %}
+    </div>
+    <form id="ask" class="composer" novalidate>
+      <label class="sr" for="text">Your request</label>
+      <textarea id="text" rows="1" maxlength="1000" placeholder="{% if ai_enabled %}Ask the agent to do something, e.g. 'Email Sofia Rossi that her battery ships tomorrow'{% else %}Free-form requests need an AI model. Try an example above.{% endif %}"></textarea>
+      <button type="submit" class="btn" id="send">Send</button>
+    </form>
+  </section>
+
+  <aside class="side" aria-label="Approvals and data">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab" id="tab-queue" aria-selected="true" aria-controls="panel-queue">Approvals <span class="count" id="pending-count" hidden></span></button>
+      <button type="button" role="tab" class="tab" id="tab-activity" aria-selected="false" aria-controls="panel-activity">What the agent did</button>
+      <button type="button" role="tab" class="tab" id="tab-data" aria-selected="false" aria-controls="panel-data">Shop data</button>
+    </div>
+    <div role="tabpanel" class="panel" id="panel-queue" aria-labelledby="tab-queue"></div>
+    <div role="tabpanel" class="panel" id="panel-activity" aria-labelledby="tab-activity" hidden></div>
+    <div role="tabpanel" class="panel" id="panel-data" aria-labelledby="tab-data" hidden></div>
+    <p class="privacy">Your copy of the shop is private to this browser and is deleted after {{ retention_hours }} hours. Emails go to a demo outbox and are never sent.</p>
+  </aside>
+</main>
+
+<script src="{% static 'agent/app.js' %}" defer></script>
+</body>
+</html>

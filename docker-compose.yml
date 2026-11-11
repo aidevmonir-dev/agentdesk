@@ -1,0 +1,12 @@
+services:
+  agentdesk:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      SECURE_SSL_REDIRECT: "0"
+    volumes:
+      - agentdesk-data:/data
+volumes:
+  agentdesk-data:
