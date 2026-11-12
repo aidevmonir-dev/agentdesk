@@ -1,5 +1,9 @@
 # AgentDesk
 
+**Live demo: [agentdesk.devomio.com](https://agentdesk.devomio.com/)**
+
+![Screenshot of the live demo](docs/screenshot.png)
+
 An AI agent that asks before it acts.
 
 AgentDesk runs the back office of a fictional bike shop. Ask it in plain language to deal with a
